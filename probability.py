@@ -41,12 +41,12 @@ for k in node_recv_SYN.keys():
 send_entropy = 0.0
 recv_entropy = 0.0
 for value in prob_node_send_SYN.values():
-    send_entropy = value*(math.log(value))
+    send_entropy += value*(math.log(value))
 send_entropy = send_entropy* (-1)
-print("Entropy measure for a node sending SYN:",send_entropy)
+print("Entropy measure for a node sending SYN:",send_entropy/math.log(50))
 
 for value in prob_node_recv_SYN.values():
-    recv_entropy = value*(math.log(value))
+    recv_entropy += value*(math.log(value))
 recv_entropy = recv_entropy*(-1)
-print("Entropy measure for a node receiving a SYN:",recv_entropy)
+print("Entropy measure for a node receiving a SYN:",recv_entropy/math.log(50))
 
