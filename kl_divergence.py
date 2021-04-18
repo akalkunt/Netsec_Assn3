@@ -17,7 +17,6 @@ def probabilities(f):
         node_recv_SYN.append(0)
         node_send_ENC.append(0)
         node_recv_ENC.append(0)
-#f1 = open(f,"r")
     for l in f:
         objects = l.split()
         source_node = int(objects[1])
@@ -47,10 +46,6 @@ def probabilities(f):
 #prob_node_recv_ENC
 
 # Calculating entropy:
-    #print("Entropy measure for a node sending SYN:",entropy(prob_node_send_SYN)/math.log(51))
-    #print("Entropy measure for a node recving SYN:", entropy(prob_node_recv_SYN)/math.log(51))
-    #print("Entropy measure for a node sending ENC:", entropy(prob_node_send_ENC)/math.log(51))
-    #print("Entropy measure for a node recving ENC:", entropy(prob_node_recv_ENC)/math.log(51))
     return prob_node_send_SYN, prob_node_recv_SYN, prob_node_send_ENC, prob_node_recv_ENC
 
 
@@ -59,13 +54,19 @@ def probabilities(f):
 if __name__ == "__main__":
     f = open("normal.tr","r")
     p_send_SYN, p_recv_SYN, p_send_ENC, p_recv_ENC = probabilities(f)
+    print("Entropies for normal trace file:\n")
+    print("Send SYN:",entropy(p_send_SYN)/math.log(51))
+    print("Send ENC:",entropy(p_send_ENC)/math.log(51))
     for i in range (1,4):
         fname = "trace"+str(i)+".tr"
         f1 = open(fname, "r")
         print("TEST trace: ",fname)
         t_send_SYN, t_recv_SYN, t_send_ENC, t_recv_ENC = probabilities(f1)
-        print("KL diergence of send SYN:", entropy(p_send_SYN,t_send_SYN, base=10))
-        #print("KL diergence of recv SYN:", entropy(p_recv_SYN,t_recv_SYN, base=10))
+        for i in range(52):
+            if t_send_SYN[i] ==0:
+                t_send_SYN[i] = 0.00001
+            if t_send_ENC[i] ==0:
+                t_send_ENC[i] = 0.00001
+        print("KL divergence of send SYN:", entropy(p_send_SYN,t_send_SYN, base=10))
         print("KL divergence of send ENC:", entropy(p_send_ENC, t_send_ENC, base=10))
-        #print("KL divergence of recv ENC:", entropy(p_recv_ENC, t_recv_ENC, base=10))
         
