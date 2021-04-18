@@ -1,22 +1,17 @@
 import math
 from scipy.stats import entropy
-
+import numpy as np
 def probabilities(f):
-    node_send_SYN = []
-    node_recv_SYN = []
-    node_send_ENC = []
-    node_recv_ENC = []
+    node_send_SYN = np.zeros(52)
+    node_recv_SYN = np.zeros(52)
+    node_send_ENC = np.zeros(52)
+    node_recv_ENC = np.zeros(52)
     total_SYN = 0
     total_ENC = 0
     prob_node_recv_SYN = []
     prob_node_send_SYN = []
     prob_node_send_ENC = []
     prob_node_recv_ENC = []
-    for i in range (52):
-        node_send_SYN.append(0)
-        node_recv_SYN.append(0)
-        node_send_ENC.append(0)
-        node_recv_ENC.append(0)
     for l in f:
         objects = l.split()
         source_node = int(objects[1])
@@ -32,20 +27,18 @@ def probabilities(f):
             if objects[8] == "1":
                 node_send_ENC[source_node] += 1
                 node_recv_ENC[dest_node] += 1
-                total_ENC += 1
 
     for i in range(52):
         prob_node_send_SYN.append(node_send_SYN[i]/total_SYN)
         prob_node_recv_SYN.append(node_recv_SYN[i]/total_SYN)
-        prob_node_send_ENC.append(node_send_ENC[i]/total_ENC)
-        prob_node_recv_ENC.append(node_recv_ENC[i]/total_ENC)
+        prob_node_send_ENC.append(node_send_ENC[i]/total_SYN)
+        prob_node_recv_ENC.append(node_recv_ENC[i]/total_SYN)
 
 #prob_node_send_SYN --- probability of a node sending a SYN
 #prob_node_recv_SYN --- probability of a node receiving a SYN.
 #prob_node_send_ENC
 #prob_node_recv_ENC
 
-# Calculating entropy:
     return prob_node_send_SYN, prob_node_recv_SYN, prob_node_send_ENC, prob_node_recv_ENC
 
 
