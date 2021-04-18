@@ -29,10 +29,10 @@ def probabilities(f):
             node_send_SYN[source_node] += 1
             node_recv_SYN[dest_node] += 1
             total_SYN += 1
-        if objects[3] == "TCP" and objects[8] == "1":
-            node_send_ENC[source_node] += 1
-            node_recv_ENC[dest_node] += 1
-            total_ENC += 1
+            if objects[8] == "1":
+                node_send_ENC[source_node] += 1
+                node_recv_ENC[dest_node] += 1
+                total_ENC += 1
 
     for i in range(52):
         prob_node_send_SYN.append(node_send_SYN[i]/total_SYN)
@@ -62,11 +62,6 @@ if __name__ == "__main__":
         f1 = open(fname, "r")
         print("TEST trace: ",fname)
         t_send_SYN, t_recv_SYN, t_send_ENC, t_recv_ENC = probabilities(f1)
-        for i in range(52):
-            if t_send_SYN[i] ==0:
-                t_send_SYN[i] = 0.00001
-            if t_send_ENC[i] ==0:
-                t_send_ENC[i] = 0.00001
         print("KL divergence of send SYN:", entropy(p_send_SYN,t_send_SYN, base=10))
         print("KL divergence of send ENC:", entropy(p_send_ENC, t_send_ENC, base=10))
         
