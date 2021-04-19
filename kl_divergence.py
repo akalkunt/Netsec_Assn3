@@ -2,6 +2,7 @@ import math
 from scipy.stats import entropy
 import numpy as np
 def probabilities(f):
+    seen = []
     node_send_SYN = np.zeros(52)
     node_recv_SYN = np.zeros(52)
     node_send_ENC = np.zeros(52)
@@ -25,14 +26,19 @@ def probabilities(f):
             node_recv_SYN[dest_node] += 1
             total_SYN += 1
             if objects[8] == "1":
+                #print("ENC pkt found")
                 node_send_ENC[source_node] += 1
                 node_recv_ENC[dest_node] += 1
+                if ((source_node, dest_node)) not in seen:
+                    seen.append((source_node,dest_node))
+                    seen.append((dest_node, source_node))
+                    total_ENC += 1
 
     for i in range(52):
         prob_node_send_SYN.append(node_send_SYN[i]/total_SYN)
         prob_node_recv_SYN.append(node_recv_SYN[i]/total_SYN)
-        prob_node_send_ENC.append(node_send_ENC[i]/total_SYN)
-        prob_node_recv_ENC.append(node_recv_ENC[i]/total_SYN)
+        prob_node_send_ENC.append(node_send_ENC[i]/total_ENC)
+        prob_node_recv_ENC.append(node_recv_ENC[i]/total_ENC)
 
 #prob_node_send_SYN --- probability of a node sending a SYN
 #prob_node_recv_SYN --- probability of a node receiving a SYN.
