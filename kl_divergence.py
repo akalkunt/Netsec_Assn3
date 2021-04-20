@@ -3,10 +3,10 @@ from scipy.stats import entropy
 import numpy as np
 def probabilities(f):
     seen = []
-    node_send_SYN = np.zeros(52)
-    node_recv_SYN = np.zeros(52)
-    node_send_ENC = np.zeros(52)
-    node_recv_ENC = np.zeros(52)
+    node_send_SYN = np.zeros(51)
+    node_recv_SYN = np.zeros(51)
+    node_send_ENC = np.zeros(51)
+    node_recv_ENC = np.zeros(51)
     total_SYN = 0
     total_ENC = 0
     prob_node_recv_SYN = []
@@ -22,19 +22,15 @@ def probabilities(f):
         if dest_node == 100:
             dest_node = 51
         if objects[3]=="TCP" and objects[7] == "SYN":
-            node_send_SYN[source_node] += 1
-            node_recv_SYN[dest_node] += 1
+            node_send_SYN[source_node-1] += 1
+            node_recv_SYN[dest_node-1] += 1
             total_SYN += 1
             if objects[8] == "1":
-                #print("ENC pkt found")
-                node_send_ENC[source_node] += 1
-                node_recv_ENC[dest_node] += 1
-                if ((source_node, dest_node)) not in seen:
-                    seen.append((source_node,dest_node))
-                    seen.append((dest_node, source_node))
-                    total_ENC += 1
+                node_send_ENC[source_node-1] += 1
+                node_recv_ENC[dest_node-1] += 1
+                total_ENC += 1
 
-    for i in range(52):
+    for i in range(51):
         prob_node_send_SYN.append(node_send_SYN[i]/total_SYN)
         prob_node_recv_SYN.append(node_recv_SYN[i]/total_SYN)
         prob_node_send_ENC.append(node_send_ENC[i]/total_ENC)
